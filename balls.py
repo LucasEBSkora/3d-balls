@@ -29,7 +29,7 @@ def draw_axis():
 
   glEnd()
   
-angular_step = pi/15
+angular_step = pi/20
 
 def get_ball_point(phi, theta, K, N) :
   r = K*(abs(sin(phi)*cos(theta))**N + abs(sin(phi)*sin(theta))**N + abs(cos(phi))**N)**(-1.0/N)
@@ -52,6 +52,22 @@ def draw_ball(K, N): #K -> raio da bola; N-> norma N-ésima usada
     phi += angular_step
   glEnd()
 
+  glBegin(GL_LINES)
+  phi = 0
+  theta = 0
+  glColor4fv((0.75, 0.75, 0.75, 0.75))
+
+  while (theta < 2*pi) :
+    while (phi < pi) :
+      glVertex3fv(get_ball_point(phi, theta, K, N))
+      glVertex3fv(get_ball_point(phi + angular_step, theta, K, N))
+      phi += angular_step
+    phi = 0
+    theta += pi/4
+  glEnd()
+
+
+
 def main():
   pygame.init()
   display = (800, 600)
@@ -60,7 +76,7 @@ def main():
   glEnable(GL_BLEND);
   gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
   glTranslatef(.0, .0, -10)
-  glRotatef(-60, 1, 0, 0)
+  glRotatef(-80, 1, 0, 0)
   glRotatef(-135, 0, 0, 1)
   
   add = 0.02
@@ -85,7 +101,7 @@ def main():
     draw_ball(K, N)
     pygame.display.flip()
     pygame.time.wait(10)
-    N += add*N
+    N += add*(N**2)
 
 main()
 
